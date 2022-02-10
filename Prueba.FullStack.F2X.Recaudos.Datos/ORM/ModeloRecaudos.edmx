@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RecaudosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="SP_GetRecaudos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_InsertarToken" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_InsertRecaudos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Estacion" Type="varchar" Mode="In" />
+          <Parameter Name="Sentido" Type="varchar" Mode="In" />
+          <Parameter Name="Hora" Type="int" Mode="In" />
+          <Parameter Name="Categoria" Type="varchar" Mode="In" />
+          <Parameter Name="Cantidad" Type="int" Mode="In" />
+          <Parameter Name="ValorTabulado" Type="decimal" Mode="In" />
+          <Parameter Name="FechaConsulta" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SP_ReporteValorTabulado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_TruncateRecaudos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_ValidarToken" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Token" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="RecaudosModelStoreContainer" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RecaudosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="RecaudosEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="SP_InsertRecaudos">
+            <Parameter Name="Estacion" Mode="In" Type="String" />
+            <Parameter Name="Sentido" Mode="In" Type="String" />
+            <Parameter Name="Hora" Mode="In" Type="Int32" />
+            <Parameter Name="Categoria" Mode="In" Type="String" />
+            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
+            <Parameter Name="ValorTabulado" Mode="In" Type="Decimal" />
+            <Parameter Name="FechaConsulta" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_TruncateRecaudos" />
+          <FunctionImport Name="SP_GetRecaudos" ReturnType="Collection(RecaudosModel.RecaudosList)" />
+          <FunctionImport Name="SP_InsertarToken" ReturnType="Collection(String)" />
+          <FunctionImport Name="SP_ValidarToken" ReturnType="Collection(RecaudosModel.ValidaToken)">
+          <Parameter Name="Token" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ReporteValorTabulado" ReturnType="Collection(RecaudosModel.ReporteValorTabulado)" />
+        </EntityContainer>
+        <ComplexType Name="RecaudosList">
+          <Property Type="String" Name="Estacion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Sentido" Nullable="false" MaxLength="15" />
+          <Property Type="Int32" Name="Hora" Nullable="false" />
+          <Property Type="String" Name="Categoria" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="Decimal" Name="ValorTabulado" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="FechaConsulta" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ValidaToken">
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="ReporteValorTabulado">
+          <Property Type="DateTime" Name="FechaConsulta" Nullable="false" />
+          <Property Type="String" Name="Estacion" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="TotalCantidad" Nullable="true" />
+          <Property Type="Decimal" Name="TotalValor" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RecaudosModelStoreContainer" CdmEntityContainer="RecaudosEntities" >
+          <FunctionImportMapping FunctionImportName="SP_InsertRecaudos" FunctionName="RecaudosModel.Store.SP_InsertRecaudos" />
+          <FunctionImportMapping FunctionImportName="SP_TruncateRecaudos" FunctionName="RecaudosModel.Store.SP_TruncateRecaudos" />
+          <FunctionImportMapping FunctionImportName="SP_GetRecaudos" FunctionName="RecaudosModel.Store.SP_GetRecaudos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RecaudosModel.RecaudosList">
+                <ScalarProperty Name="Estacion" ColumnName="Estacion" />
+                <ScalarProperty Name="Sentido" ColumnName="Sentido" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="ValorTabulado" ColumnName="ValorTabulado" />
+                <ScalarProperty Name="FechaConsulta" ColumnName="FechaConsulta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_InsertarToken" FunctionName="RecaudosModel.Store.SP_InsertarToken" />
+          <FunctionImportMapping FunctionImportName="SP_ValidarToken" FunctionName="RecaudosModel.Store.SP_ValidarToken">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RecaudosModel.ValidaToken">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ReporteValorTabulado" FunctionName="RecaudosModel.Store.SP_ReporteValorTabulado">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RecaudosModel.ReporteValorTabulado">
+                <ScalarProperty Name="FechaConsulta" ColumnName="FechaConsulta" />
+                <ScalarProperty Name="Estacion" ColumnName="Estacion" />
+                <ScalarProperty Name="TotalCantidad" ColumnName="TotalCantidad" />
+                <ScalarProperty Name="TotalValor" ColumnName="TotalValor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

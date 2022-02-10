@@ -1,0 +1,6 @@
+@using Prueba.FullStack.F2X.Recaudos.Api.Areas.HelpPage.ModelDescriptions
+@model CollectionModelDescription
+@if (Model.ElementDescription is ComplexTypeModelDescription)
+{
+    @Html.DisplayFor(m => m.ElementDescription)
+}
