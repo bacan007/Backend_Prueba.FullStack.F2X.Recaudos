@@ -44,7 +44,7 @@ namespace Prueba.FullStack.F2X.Recaudos.Negocio
 
             var recaudosValorTabulado = JsonConvert.DeserializeObject<List<Recaudo>>(respuesta);
 
-            var recaudos = Combinar(recaudosConteo, recaudosValorTabulado);
+            var recaudos = Combinar(recaudosConteo, recaudosValorTabulado, fechaConsulta);
 
             Procesar(recaudos);
         }
@@ -62,7 +62,7 @@ namespace Prueba.FullStack.F2X.Recaudos.Negocio
             }
         }
 
-        private List<Recaudo> Combinar(List<Recaudo> recaudosConteo, List<Recaudo> recaudosValorTabulado)
+        private List<Recaudo> Combinar(List<Recaudo> recaudosConteo, List<Recaudo> recaudosValorTabulado, string fechaConsulta)
         {
             var recaudos = recaudosConteo.Except(recaudosValorTabulado, new Comparar()).ToList();
 
@@ -73,6 +73,7 @@ namespace Prueba.FullStack.F2X.Recaudos.Negocio
                 if (auxRecaudo != null)
                 {
                     recaudo.ValorTabulado = auxRecaudo.ValorTabulado;
+                    recaudo.FechaConsulta = Convert.ToDateTime(fechaConsulta);
                 }
             });
 
